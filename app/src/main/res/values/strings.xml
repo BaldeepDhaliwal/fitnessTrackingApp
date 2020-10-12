@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">Fitness tracking app</string>
+    <string-array name="liftType">
+        <item>Back Squat</item>
+        <item>Deadlift</item>
+        <item>Bench Press</item>
+        <item>Overhead Press</item>
+        <item>Barbell Rows</item>
+    </string-array>
+    <string-array name="columnName">
+        <item>Weight</item>
+        <item>Reps</item>
+    </string-array>
 </resources>
