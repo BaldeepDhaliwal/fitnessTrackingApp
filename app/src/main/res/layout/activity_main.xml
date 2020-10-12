@@ -6,11 +6,51 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <Button
+        android:id="@+id/updateButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="372dp"
+        android:text="Update"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/weightRepValueEditText"
+        android:layout_width="81dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginBottom="372dp"
+        android:ems="10"
+        android:hint="Value"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/weightRepSpinner" />
+
+    <Spinner
+        android:id="@+id/liftNameSpinner"
+        android:layout_width="103dp"
+        android:layout_height="24dp"
+        android:layout_marginBottom="392dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Spinner
+        android:id="@+id/weightRepSpinner"
+        android:layout_width="127dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="384dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/liftNameSpinner" />
+
     <TextView
         android:id="@+id/WeightTitleTextView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="140dp"
+        android:layout_marginStart="112dp"
         android:text="Weight"
         android:textAlignment="viewStart"
         android:textSize="24sp"
@@ -96,7 +136,7 @@
         android:id="@+id/backSquatWeightTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="144dp"
+        android:layout_marginStart="140dp"
         android:layout_marginTop="36dp"
         android:text="0"
         app:layout_constraintStart_toStartOf="parent"
@@ -106,131 +146,91 @@
         android:id="@+id/deadliftWeightTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="88dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="140dp"
+        android:layout_marginTop="72dp"
         android:text="0"
-        app:layout_constraintStart_toEndOf="@+id/deadliftTextView"
-        app:layout_constraintTop_toBottomOf="@+id/backSquatWeightTextView" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/benchWeightTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="59dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="140dp"
+        android:layout_marginTop="108dp"
         android:text="0"
-        app:layout_constraintStart_toEndOf="@+id/benchTextView"
-        app:layout_constraintTop_toBottomOf="@+id/deadliftWeightTextView" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/ohpWeightTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="140dp"
+        android:layout_marginTop="144dp"
         android:text="0"
-        app:layout_constraintStart_toEndOf="@+id/ohpTextView"
-        app:layout_constraintTop_toBottomOf="@+id/benchWeightTextView" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/rowWeightTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="144dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="140dp"
+        android:layout_marginTop="180dp"
         android:text="0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ohpWeightTextView" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/backSquatRepsTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="111dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="140dp"
         android:text="0"
-        app:layout_constraintStart_toEndOf="@+id/backSquatWeightTextView"
-        app:layout_constraintTop_toBottomOf="@+id/repsTitleTextView3" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/deadliftRepsTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="114dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="72dp"
+        android:layout_marginEnd="140dp"
         android:text="0"
-        app:layout_constraintStart_toEndOf="@+id/deadliftWeightTextView"
-        app:layout_constraintTop_toBottomOf="@+id/backSquatRepsTextView" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/benchRepsTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="109dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="108dp"
+        android:layout_marginEnd="140dp"
         android:text="0"
-        app:layout_constraintStart_toEndOf="@+id/benchWeightTextView"
-        app:layout_constraintTop_toBottomOf="@+id/deadliftRepsTextView" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/ohpRepsTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="111dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="144dp"
+        android:layout_marginEnd="140dp"
         android:text="0"
-        app:layout_constraintStart_toEndOf="@+id/ohpWeightTextView"
-        app:layout_constraintTop_toBottomOf="@+id/benchRepsTextView" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/rowsRepsTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="111dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="180dp"
+        android:layout_marginEnd="140dp"
         android:text="0"
-        app:layout_constraintStart_toEndOf="@+id/rowWeightTextView"
-        app:layout_constraintTop_toBottomOf="@+id/ohpRepsTextView" />
-
-    <Button
-        android:id="@+id/updateButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="372dp"
-        android:text="Update"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Spinner
-        android:id="@+id/liftNameSpinner"
-        android:layout_width="103dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginBottom="380dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Spinner
-        android:id="@+id/weightRepSpinner"
-        android:layout_width="110dp"
-        android:layout_height="36dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginBottom="372dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/liftNameSpinner" />
-
-    <EditText
-        android:id="@+id/weightRepValueEditText"
-        android:layout_width="81dp"
-        android:layout_height="49dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginBottom="368dp"
-        android:ems="10"
-        android:hint="Value"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/weightRepSpinner" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/liftNameSpinnerTitleTextView"

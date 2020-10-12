@@ -1,12 +1,9 @@
 package com.example.fitnesstrackingapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -15,7 +12,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
+import androidx.appcompat.app.AppCompatActivity;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -53,11 +50,16 @@ public class MainActivity extends AppCompatActivity {
                 String liftName = liftSpinner.getSelectedItem().toString();
                 String columnName = weightOrRepSpinner.getSelectedItem().toString();
                 String temp = userValue.getText().toString();
-                Integer value = Integer.valueOf(temp);
 
-                //Call update function depending on what columnName is. If Weight call setWEight, else setREp
-                    databaseHelper.setData(liftName,value,columnName);
-                    updateDisplayedData(MainActivity.this,liftName,value,columnName);
+                try {
+                    Integer value = Integer.valueOf(temp);
+                    //Call update function depending on what columnName is. If Weight call setWEight, else setREp
+                    databaseHelper.setData(liftName, value, columnName);
+                    updateDisplayedData(MainActivity.this, liftName, value, columnName);
+                }catch (Exception e){
+                    Toast.makeText(MainActivity.this,"Please enter numbers (1-10 digits)",Toast.LENGTH_LONG).show();
+                }
+
 
 
             }
@@ -124,34 +126,81 @@ public class MainActivity extends AppCompatActivity {
 
     //Populate table with current data from db
     //Get widgets, get corresponding value in db. Set to current most db value.
-    public void getCurrentData(Context context){
+    public void getCurrentData(Context context) {
 
-        //Back Squat Widgets
+        //Squat Widgets
         TextView squatWeight = (TextView) findViewById(R.id.backSquatWeightTextView);
         TextView squatReps = (TextView) findViewById(R.id.backSquatRepsTextView);
-        //Get values
-        String squatWeightDB = databaseHelper.getData("Back Squat","Weight").getString(0);
-        Integer squatRepsDB = databaseHelper.getData("Back Squat", "Reps").getInt(0);
-
-
         //Deadlift widgets
         TextView deadliftWeight = (TextView) findViewById(R.id.deadliftWeightTextView);
         TextView deadliftReps = (TextView) findViewById(R.id.deadliftRepsTextView);
-
         //Bench widgets
         TextView benchWeight = (TextView) findViewById(R.id.benchWeightTextView);
         TextView benchReps = (TextView) findViewById(R.id.benchRepsTextView);
-
         //ohp widgets
         TextView ohpWeight = (TextView) findViewById(R.id.ohpWeightTextView);
         TextView ohpReps = (TextView) findViewById(R.id.ohpRepsTextView);
-
         //rows widgets
         TextView rowsWeight = (TextView) findViewById(R.id.rowWeightTextView);
         TextView rowsReps = (TextView) findViewById(R.id.rowsRepsTextView);
 
 
+        //Squat
+        Cursor squatWeightDB = databaseHelper.getData("Back Squat", "Weight");
+        squatWeightDB.moveToFirst();
+        String squatWeightCurrent = squatWeightDB.getString(squatWeightDB.getColumnIndex("Weight"));
 
+        Cursor squatRepDB = databaseHelper.getData("Back Squat", "Reps");
+        squatRepDB.moveToFirst();
+        String squatRepsCurrent = squatRepDB.getString(squatRepDB.getColumnIndex("Reps"));
+
+        //Deadlift
+        Cursor deadliftWeightDB = databaseHelper.getData("Deadlift", "Weight");
+        deadliftWeightDB.moveToFirst();
+        String deadliftWeightCurrent = deadliftWeightDB.getString(deadliftWeightDB.getColumnIndex("Weight"));
+
+        Cursor deadliftRepDB = databaseHelper.getData("Deadlift", "Reps");
+        deadliftRepDB.moveToFirst();
+        String deadliftRepsCurrent = deadliftRepDB.getString(deadliftRepDB.getColumnIndex("Reps"));
+
+        //Bench Press
+        Cursor benchWeightDB = databaseHelper.getData("Bench Press", "Weight");
+        benchWeightDB.moveToFirst();
+        String benchWeightsCurrent = benchWeightDB.getString(benchWeightDB.getColumnIndex("Weight"));
+
+        Cursor benchRepsDB = databaseHelper.getData("Bench Press", "Reps");
+        benchRepsDB.moveToFirst();
+        String benchRepsCurrent = benchRepsDB.getString(benchRepsDB.getColumnIndex("Reps"));
+
+        //Overhead Press
+        Cursor ohpWeightDB = databaseHelper.getData("Overhead Press", "Weight");
+        ohpWeightDB.moveToFirst();
+        String ohpWeightCurrent = ohpWeightDB.getString(ohpWeightDB.getColumnIndex("Weight"));
+
+        Cursor ohpRepsDB = databaseHelper.getData("Overhead Press", "Reps");
+        ohpRepsDB.moveToFirst();
+        String ohpRepsCurrent = ohpRepsDB.getString(ohpRepsDB.getColumnIndex("Reps"));
+
+        //Barbell Rows
+        Cursor rowsWeightDB = databaseHelper.getData("Barbell Rows", "Weight");
+        rowsWeightDB.moveToFirst();
+        String rowsWeightCurrent = rowsWeightDB.getString(rowsWeightDB.getColumnIndex("Weight"));
+
+        Cursor rowsRepsDB = databaseHelper.getData("Barbell Rows", "Reps");
+        rowsRepsDB.moveToFirst();
+        String rowsRepsCurrent = rowsRepsDB.getString(rowsRepsDB.getColumnIndex("Reps"));
+
+        //update hard coded table textview values with most current values found in db
+        squatWeight.setText(squatWeightCurrent);
+        squatReps.setText(squatRepsCurrent);
+        deadliftWeight.setText(deadliftWeightCurrent);
+        deadliftReps.setText(deadliftRepsCurrent);
+        benchWeight.setText(benchWeightsCurrent);
+        benchReps.setText(benchRepsCurrent);
+        ohpWeight.setText(ohpWeightCurrent);
+        ohpReps.setText(ohpRepsCurrent);
+        rowsWeight.setText(rowsWeightCurrent);
+        rowsReps.setText(rowsRepsCurrent);
 
 
     }

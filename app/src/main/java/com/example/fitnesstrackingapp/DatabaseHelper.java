@@ -57,7 +57,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getData(String lift, String column){
 
         SQLiteDatabase db = this.getWritableDatabase();
+        //Cursor cursor = db.rawQuery("Select " + column + " from Lifts where LiftName == " + "\""+lift+"\"", null);
         Cursor cursor = db.rawQuery("Select " + column + " from Lifts where LiftName == " + "\""+lift+"\"", null);
+
 
         return cursor;
 
