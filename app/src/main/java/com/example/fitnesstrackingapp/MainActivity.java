@@ -1,7 +1,9 @@
 package com.example.fitnesstrackingapp;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +13,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.nio.charset.MalformedInputException;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -29,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
         final Spinner liftSpinner = (Spinner) findViewById(R.id.liftNameSpinner);
         final Spinner weightOrRepSpinner = (Spinner) findViewById(R.id.weightRepSpinner);
         final EditText userValue = (EditText) findViewById(R.id.weightRepValueEditText);
-
         databaseHelper = new DatabaseHelper(this);
 
         //Populate Spinners
@@ -41,8 +44,12 @@ public class MainActivity extends AppCompatActivity {
         adapterWeightRep.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         weightOrRepSpinner.setAdapter(adapterWeightRep);
 
+        //Update table with latest values from db
         getCurrentData(this);
-        //When update clicked update values
+
+
+
+        //Insert new values on click
         updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -56,14 +63,31 @@ public class MainActivity extends AppCompatActivity {
                     //Call update function depending on what columnName is. If Weight call setWEight, else setREp
                     databaseHelper.setData(liftName, value, columnName);
                     updateDisplayedData(MainActivity.this, liftName, value, columnName);
-                }catch (Exception e){
-                    Toast.makeText(MainActivity.this,"Please enter numbers (1-10 digits)",Toast.LENGTH_LONG).show();
+                } catch (Exception e) {
+                    Toast.makeText(MainActivity.this, "Please enter numbers (1-10 digits)", Toast.LENGTH_LONG).show();
                 }
-
 
 
             }
         });
+
+
+
+
+        //Notepad button
+        Button notepadButton = (Button) findViewById(R.id.notePadButton);
+
+        //Switch activities on click
+        notepadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,Notepad.class);
+                startActivity(intent);
+            }
+        });
+
+
+
 
 
     }
@@ -205,4 +229,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+
 }
+
+//TODO:
+//-Add Notepad
+//-Add exrx api if approved

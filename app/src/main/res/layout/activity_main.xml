@@ -252,4 +252,13 @@
         app:layout_constraintBottom_toTopOf="@+id/weightRepSpinner"
         app:layout_constraintStart_toEndOf="@+id/liftNameSpinnerTitleTextView" />
 
+    <Button
+        android:id="@+id/notePadButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:text="Notes"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
