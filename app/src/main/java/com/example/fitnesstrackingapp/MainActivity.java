@@ -5,7 +5,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -15,12 +17,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.nio.charset.MalformedInputException;
+import java.util.concurrent.TimeUnit;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 
 public class MainActivity extends AppCompatActivity {
     public DatabaseHelper databaseHelper;
+    private boolean isAlarmPlaying = false;
+    private MediaPlayer mp= new MediaPlayer();
+    private boolean isTimerStarted = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +39,13 @@ public class MainActivity extends AppCompatActivity {
         Button updateButton = (Button) findViewById(R.id.updateButton);
         final Spinner liftSpinner = (Spinner) findViewById(R.id.liftNameSpinner);
         final Spinner weightOrRepSpinner = (Spinner) findViewById(R.id.weightRepSpinner);
+        Spinner timerSpinner = (Spinner) findViewById(R.id.timerSpinner);
         final EditText userValue = (EditText) findViewById(R.id.weightRepValueEditText);
+        Button timerStart = (Button) findViewById(R.id.startButton);
+        Button resetButton = (Button) findViewById(R.id.resetButton);
         databaseHelper = new DatabaseHelper(this);
+        mp = MediaPlayer.create(MainActivity.this, R.raw.alarm);
+
 
         //Populate Spinners
         ArrayAdapter<CharSequence> adapterLiftName = ArrayAdapter.createFromResource(this, R.array.liftType, android.R.layout.simple_spinner_item);
@@ -43,6 +55,10 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter<CharSequence> adapterWeightRep = ArrayAdapter.createFromResource(this, R.array.columnName, android.R.layout.simple_spinner_item);
         adapterWeightRep.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         weightOrRepSpinner.setAdapter(adapterWeightRep);
+
+        ArrayAdapter<CharSequence> adapterTimer = ArrayAdapter.createFromResource(this,R.array.timerValues,android.R.layout.simple_spinner_item);
+        adapterTimer.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        timerSpinner.setAdapter(adapterTimer);
 
         //Update table with latest values from db
         getCurrentData(this);
@@ -86,8 +102,34 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //timer start button
 
 
+        //When start button hit start timer
+        timerStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startTimer();
+            }
+        });
+
+        //Stop alarm if reset pressed
+
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //if alarm is playing then turn it off
+                if(isAlarmPlaying){
+                    mp.stop();
+                    mp.reset();
+                    mp = new MediaPlayer();
+                    mp = MediaPlayer.create(MainActivity.this, R.raw.alarm);
+
+                    //mp.release();
+                    isAlarmPlaying = false;
+                }
+            }
+        });
 
 
     }
@@ -229,7 +271,66 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //start timer
+    public void startTimer() {
+        //only start if not already on
+        if (!isTimerStarted) {
 
+            isTimerStarted = true;
+
+
+            //widgets
+            Spinner timeSpinner = (Spinner) findViewById(R.id.timerSpinner);
+            String selectedTime = timeSpinner.getSelectedItem().toString();
+            int timeMilliseconds;
+
+
+            //Turn time into milliseconds
+            if (selectedTime.equals("30")) {
+                int temp = Integer.parseInt("30");
+                timeMilliseconds = temp * 1000;
+            } else if (selectedTime.equals("1:30")) {
+                int temp = Integer.parseInt("90");
+                timeMilliseconds = temp * 1000;
+            } else if (selectedTime.equals("2:30")) {
+                int temp = Integer.parseInt("150");
+                timeMilliseconds = temp * 1000;
+            } else if (selectedTime.equals("3:00")) {
+                int temp = Integer.parseInt("180");
+                timeMilliseconds = temp * 1000;
+            } else {
+                int temp = Integer.parseInt("300");
+                timeMilliseconds = temp * 1000;
+            }
+
+            //Create timer
+
+            new CountDownTimer(timeMilliseconds, 1000) {
+                TextView timer = (TextView) findViewById(R.id.timeLeftTextView);
+
+
+                @SuppressLint({"DefaultLocale", "SetTextI18n"})
+                @Override
+                public void onTick(long millisUntilFinished) {
+
+                    timer.setText("" + String.format("%d min, %d sec",
+                            TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
+                            TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) -
+                                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))));
+                }
+
+                @SuppressLint("SetTextI18n")
+                @Override
+                public void onFinish() {
+                    timer.setText("0");
+                    mp.start();
+                    isAlarmPlaying = true;
+                    isTimerStarted = false;
+                }
+            }.start();
+
+        }
+    }
 
 }
 

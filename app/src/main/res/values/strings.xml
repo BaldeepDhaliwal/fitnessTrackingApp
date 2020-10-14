@@ -11,4 +11,11 @@
         <item>Weight</item>
         <item>Reps</item>
     </string-array>
+    <string-array name="timerValues">
+        <item>30</item>
+        <item>1:30</item>
+        <item>2:30</item>
+        <item>3:00</item>
+        <item>5:00</item>
+    </string-array>
 </resources>
