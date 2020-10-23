@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean isAlarmPlaying = false;
     private MediaPlayer mp= new MediaPlayer();
     private boolean isTimerStarted = false;
+    private CountDownTimer timer;
 
 
     @Override
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         Spinner timerSpinner = (Spinner) findViewById(R.id.timerSpinner);
         final EditText userValue = (EditText) findViewById(R.id.weightRepValueEditText);
         Button timerStart = (Button) findViewById(R.id.startButton);
-        Button resetButton = (Button) findViewById(R.id.resetButton);
+        final Button resetButton = (Button) findViewById(R.id.resetButton);
         databaseHelper = new DatabaseHelper(this);
         mp = MediaPlayer.create(MainActivity.this, R.raw.alarm);
 
@@ -118,16 +119,8 @@ public class MainActivity extends AppCompatActivity {
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //if alarm is playing then turn it off
-                if(isAlarmPlaying){
-                    mp.stop();
-                    mp.reset();
-                    mp = new MediaPlayer();
-                    mp = MediaPlayer.create(MainActivity.this, R.raw.alarm);
+                resetTimer();
 
-                    //mp.release();
-                    isAlarmPlaying = false;
-                }
             }
         });
 
@@ -305,7 +298,7 @@ public class MainActivity extends AppCompatActivity {
 
             //Create timer
 
-            new CountDownTimer(timeMilliseconds, 1000) {
+            timer = new CountDownTimer(timeMilliseconds, 1000) {
                 TextView timer = (TextView) findViewById(R.id.timeLeftTextView);
 
 
@@ -327,8 +320,33 @@ public class MainActivity extends AppCompatActivity {
                     isAlarmPlaying = true;
                     isTimerStarted = false;
                 }
-            }.start();
+            };
+            timer.start();
 
+        }
+    }
+
+    //reset timer either after time runs out or prematurely while time is remaining
+    public void resetTimer(){
+        //if alarm is playing then turn it off
+        if(isAlarmPlaying){
+            mp.stop();
+            mp.reset();
+            mp = new MediaPlayer();
+            mp = MediaPlayer.create(MainActivity.this, R.raw.alarm);
+
+            //mp.release();
+            isAlarmPlaying = false;
+        }
+        //else timer must still be running. End timer prematurely.
+        else{
+            if(isTimerStarted) {
+                int x = 10;
+                timer.cancel();
+                TextView timerTimeLeft = (TextView) findViewById(R.id.timeLeftTextView);
+                timerTimeLeft.setText("0");
+                isTimerStarted = false;
+            }
         }
     }
 
