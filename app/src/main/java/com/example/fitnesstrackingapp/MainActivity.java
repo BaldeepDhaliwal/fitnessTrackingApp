@@ -25,9 +25,11 @@ import androidx.appcompat.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity {
     public DatabaseHelper databaseHelper;
     private boolean isAlarmPlaying = false;
-    private MediaPlayer mp= new MediaPlayer();
+    private MediaPlayer mp = new MediaPlayer();
     private boolean isTimerStarted = false;
     private CountDownTimer timer;
+    private int timeLeft;
+    private boolean isTimerPaused = false;
 
 
     @Override
@@ -38,12 +40,13 @@ public class MainActivity extends AppCompatActivity {
 
         //Get widgets
         Button updateButton = (Button) findViewById(R.id.updateButton);
+        Button timerStart = (Button) findViewById(R.id.startButton);
+        final Button resetButton = (Button) findViewById(R.id.resetButton);
+        final Button pauseButton = (Button) findViewById(R.id.pauseButton);
         final Spinner liftSpinner = (Spinner) findViewById(R.id.liftNameSpinner);
         final Spinner weightOrRepSpinner = (Spinner) findViewById(R.id.weightRepSpinner);
         Spinner timerSpinner = (Spinner) findViewById(R.id.timerSpinner);
         final EditText userValue = (EditText) findViewById(R.id.weightRepValueEditText);
-        Button timerStart = (Button) findViewById(R.id.startButton);
-        final Button resetButton = (Button) findViewById(R.id.resetButton);
         databaseHelper = new DatabaseHelper(this);
         mp = MediaPlayer.create(MainActivity.this, R.raw.alarm);
 
@@ -57,13 +60,12 @@ public class MainActivity extends AppCompatActivity {
         adapterWeightRep.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         weightOrRepSpinner.setAdapter(adapterWeightRep);
 
-        ArrayAdapter<CharSequence> adapterTimer = ArrayAdapter.createFromResource(this,R.array.timerValues,android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapterTimer = ArrayAdapter.createFromResource(this, R.array.timerValues, android.R.layout.simple_spinner_item);
         adapterTimer.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         timerSpinner.setAdapter(adapterTimer);
 
         //Update table with latest values from db
         getCurrentData(this);
-
 
 
         //Insert new values on click
@@ -89,8 +91,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
-
         //Notepad button
         Button notepadButton = (Button) findViewById(R.id.notePadButton);
 
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         notepadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,Notepad.class);
+                Intent intent = new Intent(MainActivity.this, Notepad.class);
                 startActivity(intent);
             }
         });
@@ -110,12 +110,18 @@ public class MainActivity extends AppCompatActivity {
         timerStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startTimer();
+                //If paused pass in time left, else use default startTimer
+                if(isTimerPaused) {
+                    startTimer(timeLeft);
+                    //Time no longer paused. Update istimerpaused
+                    isTimerPaused = false;
+                }else{
+                    startTimer();
+                }
             }
         });
 
         //Stop alarm if reset pressed
-
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,6 +130,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //Pause timer if pause button pressed
+        pauseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timer.cancel();
+                isTimerStarted = false;
+                isTimerPaused = true;            }
+        });
 
     }
 
@@ -264,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    //start timer
+    //start timer with predefined durations
     public void startTimer() {
         //only start if not already on
         if (!isTimerStarted) {
@@ -297,7 +311,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
             //Create timer
-
             timer = new CountDownTimer(timeMilliseconds, 1000) {
                 TextView timer = (TextView) findViewById(R.id.timeLeftTextView);
 
@@ -305,11 +318,51 @@ public class MainActivity extends AppCompatActivity {
                 @SuppressLint({"DefaultLocale", "SetTextI18n"})
                 @Override
                 public void onTick(long millisUntilFinished) {
-
-                    timer.setText("" + String.format("%d min, %d sec",
+                    //set timer text
+                    timer.setText("" + String.format("%d:%d",
                             TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
                             TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) -
                                     TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))));
+                    //store time left to resume after pressing pause
+                    timeLeft = (int) millisUntilFinished;
+                }
+
+                @SuppressLint("SetTextI18n")
+                @Override
+                public void onFinish() {
+                    timer.setText("0");
+                    mp.start();
+                    isAlarmPlaying = true;
+                    isTimerStarted = false;
+                }
+            };
+            timer.start();
+
+        }
+    }
+
+    //start timer with custom duration
+    public void startTimer(int timeLeftOnTimer) {
+        //only start if not already on
+        if (!isTimerStarted) {
+
+            isTimerStarted = true;
+
+            //Create timer
+            timer = new CountDownTimer(timeLeftOnTimer, 1000) {
+                TextView timer = (TextView) findViewById(R.id.timeLeftTextView);
+
+
+                @SuppressLint({"DefaultLocale", "SetTextI18n"})
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    //set timer text
+                    timer.setText("" + String.format("%d:%d",
+                            TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
+                            TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) -
+                                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))));
+                    //store time left to resume after pressing pause
+                    timeLeft = (int) millisUntilFinished;
                 }
 
                 @SuppressLint("SetTextI18n")
@@ -327,9 +380,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //reset timer either after time runs out or prematurely while time is remaining
-    public void resetTimer(){
-        //if alarm is playing then turn it off
-        if(isAlarmPlaying){
+    public void resetTimer() {
+        //Timer is done if alarm is playing
+        if (isAlarmPlaying) {
             mp.stop();
             mp.reset();
             mp = new MediaPlayer();
@@ -338,20 +391,29 @@ public class MainActivity extends AppCompatActivity {
             //mp.release();
             isAlarmPlaying = false;
         }
-        //else timer must still be running. End timer prematurely.
         else{
-            if(isTimerStarted) {
-                int x = 10;
-                timer.cancel();
+                //timer running end it
+                if(isTimerStarted) {
+                    timer.cancel();
+                    isTimerStarted = false;
+                }
+                //set timer text back to 0.
                 TextView timerTimeLeft = (TextView) findViewById(R.id.timeLeftTextView);
                 timerTimeLeft.setText("0");
-                isTimerStarted = false;
-            }
         }
     }
+
+
+
+
 
 }
 
 //TODO:
-//-Add Notepad
+//-Add Notepad - done
 //-Add exrx api if approved
+//-pause button
+//-reset before hits 0 - done
+//improve gui
+//add weight tracker + graph
+//custom timer input box
