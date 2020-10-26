@@ -111,11 +111,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //If paused pass in time left, else use default startTimer
-                if(isTimerPaused) {
+                if (isTimerPaused) {
                     startTimer(timeLeft);
-                    //Time no longer paused. Update istimerpaused
                     isTimerPaused = false;
-                }else{
+                } else {
                     startTimer();
                 }
             }
@@ -136,7 +135,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 timer.cancel();
                 isTimerStarted = false;
-                isTimerPaused = true;            }
+                isTimerPaused = true;
+            }
         });
 
     }
@@ -319,7 +319,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onTick(long millisUntilFinished) {
                     //set timer text
-                    timer.setText("" + String.format("%d:%d",
+                    timer.setText("" + String.format("%d:%02d",
                             TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
                             TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) -
                                     TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))));
@@ -357,7 +357,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onTick(long millisUntilFinished) {
                     //set timer text
-                    timer.setText("" + String.format("%d:%d",
+                    timer.setText("" + String.format("%d:%02d",
                             TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
                             TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) -
                                     TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))));
@@ -390,21 +390,17 @@ public class MainActivity extends AppCompatActivity {
 
             //mp.release();
             isAlarmPlaying = false;
-        }
-        else{
-                //timer running end it
-                if(isTimerStarted) {
-                    timer.cancel();
-                    isTimerStarted = false;
-                }
-                //set timer text back to 0.
-                TextView timerTimeLeft = (TextView) findViewById(R.id.timeLeftTextView);
-                timerTimeLeft.setText("0");
+        } else {
+            //timer running end it
+            if (isTimerStarted) {
+                timer.cancel();
+                isTimerStarted = false;
+            }
+            //set timer text back to 0.
+            TextView timerTimeLeft = (TextView) findViewById(R.id.timeLeftTextView);
+            timerTimeLeft.setText("0");
         }
     }
-
-
-
 
 
 }
@@ -417,3 +413,4 @@ public class MainActivity extends AppCompatActivity {
 //improve gui
 //add weight tracker + graph
 //custom timer input box
+//youtube se
