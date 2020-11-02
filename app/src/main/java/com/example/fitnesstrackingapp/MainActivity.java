@@ -1,7 +1,7 @@
 package com.example.fitnesstrackingapp;
 
 import android.annotation.SuppressLint;
-import android.content.ContentValues;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -16,7 +16,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.nio.charset.MalformedInputException;
 import java.util.concurrent.TimeUnit;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
     private CountDownTimer timer;
     private int timeLeft;
     private boolean isTimerPaused = false;
+    public static int customMinutes;
+    public static int customSeconds;
 
 
     @Override
@@ -40,12 +41,12 @@ public class MainActivity extends AppCompatActivity {
 
         //Get widgets
         Button updateButton = (Button) findViewById(R.id.updateButton);
-        Button timerStart = (Button) findViewById(R.id.startButton);
+        Button timerStart = (Button) findViewById(R.id.startButtonCustom);
         final Button resetButton = (Button) findViewById(R.id.resetButton);
         final Button pauseButton = (Button) findViewById(R.id.pauseButton);
         final Spinner liftSpinner = (Spinner) findViewById(R.id.liftNameSpinner);
         final Spinner weightOrRepSpinner = (Spinner) findViewById(R.id.weightRepSpinner);
-        Spinner timerSpinner = (Spinner) findViewById(R.id.timerSpinner);
+        final Spinner timerSpinner = (Spinner) findViewById(R.id.timerSpinner);
         final EditText userValue = (EditText) findViewById(R.id.weightRepValueEditText);
         databaseHelper = new DatabaseHelper(this);
         mp = MediaPlayer.create(MainActivity.this, R.raw.alarm);
@@ -85,15 +86,12 @@ public class MainActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     Toast.makeText(MainActivity.this, "Please enter numbers (1-10 digits)", Toast.LENGTH_LONG).show();
                 }
-
-
             }
         });
 
 
         //Notepad button
         Button notepadButton = (Button) findViewById(R.id.notePadButton);
-
         //Switch activities on click
         notepadButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,18 +101,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //timer start button
-
-
         //When start button hit start timer
         timerStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //If paused pass in time left, else use default startTimer
+                Spinner spinner = (Spinner) findViewById(R.id.timerSpinner);
+                String val = spinner.getSelectedItem().toString();
+
+                //Get custom time if custom selected
+                if(val.equals("Custom") && !isTimerPaused && !isTimerStarted){
+                    //Switch activties to get time
+                    Intent customTime = new Intent(MainActivity.this, getCustomTime.class);
+                    startActivityForResult(customTime,1);
+
+                }
+                //Paused time/incomplete time
                 if (isTimerPaused) {
-                    startTimer(timeLeft);
                     isTimerPaused = false;
-                } else {
+                    startTimer(timeLeft);
+                }
+                //Use predefined time from list
+                else {
                     startTimer();
                 }
             }
@@ -138,6 +145,8 @@ public class MainActivity extends AppCompatActivity {
                 isTimerPaused = true;
             }
         });
+
+        //Launch Custom Timer input box
 
     }
 
@@ -286,10 +295,13 @@ public class MainActivity extends AppCompatActivity {
             isTimerStarted = true;
 
 
-            //widgets
+            //Get time selected from spinner.
             Spinner timeSpinner = (Spinner) findViewById(R.id.timerSpinner);
             String selectedTime = timeSpinner.getSelectedItem().toString();
             int timeMilliseconds;
+
+            //if(!selectedTime.equals("Custom")){
+
 
 
             //Turn time into milliseconds
@@ -338,11 +350,17 @@ public class MainActivity extends AppCompatActivity {
             };
             timer.start();
 
+          //  }
         }
     }
 
     //start timer with custom duration
     public void startTimer(int timeLeftOnTimer) {
+
+        Spinner timeSpinner = (Spinner) findViewById(R.id.timerSpinner);
+        String time = timeSpinner.getSelectedItem().toString();
+
+
         //only start if not already on
         if (!isTimerStarted) {
 
@@ -393,15 +411,27 @@ public class MainActivity extends AppCompatActivity {
         } else {
             //timer running end it
             if (isTimerStarted) {
-                timer.cancel();
                 isTimerStarted = false;
             }
+            timer.cancel();
             //set timer text back to 0.
             TextView timerTimeLeft = (TextView) findViewById(R.id.timeLeftTextView);
             timerTimeLeft.setText("0");
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1) {
+            //if (resultCode == Activity.RESULT_CANCELED) {
+                //minute to seconds
+                int milliseconds = ((MainActivity.customMinutes*60)+MainActivity.customSeconds)*1000;
+                startTimer(milliseconds);
+            //}
+        }
+    }
 
 }
 
