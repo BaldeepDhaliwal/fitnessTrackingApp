@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -16,6 +17,8 @@ public class getCustomTime extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_custom_time);
+
+
         final Button startButton = (Button) findViewById(R.id.startButtonCustom);
 
         //Pass back entered time and switch activties
@@ -29,11 +32,12 @@ public class getCustomTime extends AppCompatActivity {
                 EditText secondsEditText = (EditText)  findViewById(R.id.secondsEditText);
                 MainActivity.customMinutes = Integer.parseInt(minuteEditText.getText().toString());
                 MainActivity.customSeconds = Integer.parseInt(secondsEditText.getText().toString());
+                MainActivity.customValuesEntered = true;
                 Intent intent = new Intent(getCustomTime.this, MainActivity.class);
                 setResult(Activity.RESULT_CANCELED,intent);
                 finish();
                 }catch (Exception e){
-                    Toast.makeText(getCustomTime.this, "Please enter a valid numbers for minute and seconds", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getCustomTime.this, "Please enter values for both Minutes and Seconds.", Toast.LENGTH_LONG).show();
                 }
             }
 

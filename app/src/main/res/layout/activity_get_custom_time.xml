@@ -3,46 +3,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="300dp"
     tools:context=".getCustomTime">
 
-    <TextView
-        android:id="@+id/minuteTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="107dp"
-        android:layout_marginEnd="324dp"
-        android:layout_marginBottom="605dp"
-        android:text="Min:"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/secondsTextView"
+    <Button
+        android:id="@+id/startButtonCustom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
-        android:layout_marginEnd="349dp"
-        android:layout_marginBottom="540dp"
-        android:text="Sec:"
-        android:textSize="24sp"
-        android:textStyle="bold"
+        android:layout_marginStart="247dp"
+        android:layout_marginEnd="76dp"
+        android:layout_marginBottom="57dp"
+        android:text="Start"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.222"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/minuteEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="88dp"
-        android:layout_marginEnd="78dp"
+        android:layout_marginTop="76dp"
+        android:layout_marginEnd="76dp"
         android:ems="10"
         android:hint="Enter minutes"
         android:inputType="number"
@@ -53,28 +35,36 @@
         android:id="@+id/secondsEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
-        android:layout_marginEnd="78dp"
-        android:layout_marginBottom="540dp"
+        android:layout_marginEnd="76dp"
+        android:layout_marginBottom="22dp"
         android:ems="10"
         android:hint="Enter Seconds"
         android:inputType="number"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/minuteEditText" />
+        app:layout_constraintBottom_toTopOf="@+id/startButtonCustom"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <Button
-        android:id="@+id/startButtonCustom"
+    <TextView
+        android:id="@+id/minuteTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="244dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="79dp"
-        android:layout_marginBottom="442dp"
-        android:text="Start"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="76dp"
+        android:text="Min:"
+        android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/secondsEditText" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/secondsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginBottom="132dp"
+        android:text="Sec:"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

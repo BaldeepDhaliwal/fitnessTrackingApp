@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean isTimerPaused = false;
     public static int customMinutes;
     public static int customSeconds;
+    public static boolean customValuesEntered = false;
 
 
     @Override
@@ -116,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }
                 //Paused time/incomplete time
-                if (isTimerPaused) {
+                else if (isTimerPaused) {
                     isTimerPaused = false;
                     startTimer(timeLeft);
                 }
@@ -140,11 +141,13 @@ public class MainActivity extends AppCompatActivity {
         pauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(timer!=null)
+                //Pause if timer running
+                if(timer!=null){
                 timer.cancel();
 
                 isTimerStarted = false;
                 isTimerPaused = true;
+                }
             }
         });
 
@@ -414,8 +417,13 @@ public class MainActivity extends AppCompatActivity {
             //end timer prematurely
             isTimerStarted = false;
             isTimerPaused = false;
-            if(timer!=null)
-            timer.cancel();
+            timeLeft = 0;
+            MainActivity.customSeconds = 0;
+            MainActivity.customMinutes = 0;
+            if(timer!=null) {
+                timer.cancel();
+                timer = null;
+            }
             //update timer text
             TextView timerTimeLeft = (TextView) findViewById(R.id.timeLeftTextView);
             timerTimeLeft.setText("0");
@@ -427,11 +435,11 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 1) {
-            //if (resultCode == Activity.RESULT_CANCELED) {
-                //minute to seconds
-                int milliseconds = ((MainActivity.customMinutes*60)+MainActivity.customSeconds)*1000;
-                startTimer(milliseconds);
-            //}
+                if(MainActivity.customValuesEntered) {
+                    MainActivity.customValuesEntered = false;
+                    int milliseconds = ((MainActivity.customMinutes*60)+MainActivity.customSeconds)*1000;
+                    startTimer(milliseconds);
+                }
         }
     }
 
