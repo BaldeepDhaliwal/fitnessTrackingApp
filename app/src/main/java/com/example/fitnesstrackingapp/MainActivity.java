@@ -140,7 +140,9 @@ public class MainActivity extends AppCompatActivity {
         pauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(timer!=null)
                 timer.cancel();
+
                 isTimerStarted = false;
                 isTimerPaused = true;
             }
@@ -399,7 +401,7 @@ public class MainActivity extends AppCompatActivity {
 
     //reset timer either after time runs out or prematurely while time is remaining
     public void resetTimer() {
-        //Timer is done if alarm is playing
+        //Stop alarm
         if (isAlarmPlaying) {
             mp.stop();
             mp.reset();
@@ -409,12 +411,12 @@ public class MainActivity extends AppCompatActivity {
             //mp.release();
             isAlarmPlaying = false;
         } else {
-            //timer running end it
-            if (isTimerStarted) {
-                isTimerStarted = false;
-            }
+            //end timer prematurely
+            isTimerStarted = false;
+            isTimerPaused = false;
+            if(timer!=null)
             timer.cancel();
-            //set timer text back to 0.
+            //update timer text
             TextView timerTimeLeft = (TextView) findViewById(R.id.timeLeftTextView);
             timerTimeLeft.setText("0");
         }
