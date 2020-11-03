@@ -447,10 +447,12 @@ public class MainActivity extends AppCompatActivity {
 
 //TODO:
 //-Add Notepad - done
-//-Add exrx api if approved - No response as of yet.
 //-pause button - done
 //-reset before hits 0 - done
 //improve gui
 //add weight tracker + graph
-//custom timer input box
+//custom timer input box - done
+//1rm calculator
+//calculator
+//exercise reference list with build in browser
 //youtube se
