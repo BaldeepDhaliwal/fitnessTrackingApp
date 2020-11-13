@@ -25,18 +25,17 @@ public class getCustomTime extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try
-                {
-                //get minutes and seconds
-                EditText minuteEditText = (EditText) findViewById(R.id.minuteEditText);
-                EditText secondsEditText = (EditText)  findViewById(R.id.secondsEditText);
-                MainActivity.customMinutes = Integer.parseInt(minuteEditText.getText().toString());
-                MainActivity.customSeconds = Integer.parseInt(secondsEditText.getText().toString());
-                MainActivity.customValuesEntered = true;
-                Intent intent = new Intent(getCustomTime.this, MainActivity.class);
-                setResult(Activity.RESULT_CANCELED,intent);
-                finish();
-                }catch (Exception e){
+                try {
+                    //get minutes and seconds
+                    EditText minuteEditText = (EditText) findViewById(R.id.minuteEditText);
+                    EditText secondsEditText = (EditText) findViewById(R.id.secondsEditText);
+                    MainActivity.customMinutes = Integer.parseInt(minuteEditText.getText().toString());
+                    MainActivity.customSeconds = Integer.parseInt(secondsEditText.getText().toString());
+                    MainActivity.customValuesEntered = true;
+                    Intent intent = new Intent(getCustomTime.this, MainActivity.class);
+                    setResult(Activity.RESULT_CANCELED, intent);
+                    finish();
+                } catch (Exception e) {
                     Toast.makeText(getCustomTime.this, "Please enter values for both Minutes and Seconds.", Toast.LENGTH_LONG).show();
                 }
             }

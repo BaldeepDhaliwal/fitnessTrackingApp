@@ -110,10 +110,10 @@ public class MainActivity extends AppCompatActivity {
                 String val = spinner.getSelectedItem().toString();
 
                 //Get custom time if custom selected
-                if(val.equals("Custom") && !isTimerPaused && !isTimerStarted){
+                if (val.equals("Custom") && !isTimerPaused && !isTimerStarted) {
                     //Switch activties to get time
                     Intent customTime = new Intent(MainActivity.this, getCustomTime.class);
-                    startActivityForResult(customTime,1);
+                    startActivityForResult(customTime, 1);
 
                 }
                 //Paused time/incomplete time
@@ -142,11 +142,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Pause if timer running
-                if(timer!=null){
-                timer.cancel();
-
-                isTimerStarted = false;
-                isTimerPaused = true;
+                if (timer != null) {
+                    timer.cancel();
+                    isTimerStarted = false;
+                    isTimerPaused = true;
                 }
             }
         });
@@ -294,6 +293,9 @@ public class MainActivity extends AppCompatActivity {
 
     //start timer with predefined durations
     public void startTimer() {
+        if(isAlarmPlaying){
+            resetTimer();
+        }
         //only start if not already on
         if (!isTimerStarted) {
 
@@ -306,7 +308,6 @@ public class MainActivity extends AppCompatActivity {
             int timeMilliseconds;
 
             //if(!selectedTime.equals("Custom")){
-
 
 
             //Turn time into milliseconds
@@ -355,7 +356,7 @@ public class MainActivity extends AppCompatActivity {
             };
             timer.start();
 
-          //  }
+            //  }
         }
     }
 
@@ -365,7 +366,9 @@ public class MainActivity extends AppCompatActivity {
         Spinner timeSpinner = (Spinner) findViewById(R.id.timerSpinner);
         String time = timeSpinner.getSelectedItem().toString();
 
-
+        if(isAlarmPlaying){
+            resetTimer();
+        }
         //only start if not already on
         if (!isTimerStarted) {
 
@@ -420,7 +423,7 @@ public class MainActivity extends AppCompatActivity {
             timeLeft = 0;
             MainActivity.customSeconds = 0;
             MainActivity.customMinutes = 0;
-            if(timer!=null) {
+            if (timer != null) {
                 timer.cancel();
                 timer = null;
             }
@@ -435,11 +438,11 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 1) {
-                if(MainActivity.customValuesEntered) {
-                    MainActivity.customValuesEntered = false;
-                    int milliseconds = ((MainActivity.customMinutes*60)+MainActivity.customSeconds)*1000;
-                    startTimer(milliseconds);
-                }
+            if (MainActivity.customValuesEntered) {
+                MainActivity.customValuesEntered = false;
+                int milliseconds = ((MainActivity.customMinutes * 60) + MainActivity.customSeconds) * 1000;
+                startTimer(milliseconds);
+            }
         }
     }
 
